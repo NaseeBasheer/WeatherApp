@@ -46,17 +46,24 @@ class SecondFragment : Fragment(), RecyclerViewAdapter.ClickListener {
     private fun buildDisplayedData(){
         listData.add(DataModel("London, UK"))
         listData.add(DataModel("New York, US"))
-        listData.add(DataModel("Chicago"))
-        listData.add(DataModel("Paris"))
-        listData.add(DataModel("New Delhi"))
-        listData.add(DataModel("Los Angeles"))
-        listData.add(DataModel("Houston"))
-        listData.add(DataModel("Tokyo"))
-        listData.add(DataModel("Beijing"))
-        listData.add(DataModel("Mumbai"))
-        listData.add(DataModel("Manila"))
-        listData.add(DataModel("Barcelona"))
-        listData.add(DataModel("Barcelona"))
+        listData.add(DataModel("Chicago, US"))
+        listData.add(DataModel("Paris, FR"))
+        listData.add(DataModel("New Delhi, IN"))
+        listData.add(DataModel("Los Angeles, US"))
+        listData.add(DataModel("Milan, IT"))
+        listData.add(DataModel("Tokyo, JP"))
+        listData.add(DataModel("Beijing, CN"))
+        listData.add(DataModel("Mumbai, IN"))
+        listData.add(DataModel("Manila, PH"))
+        listData.add(DataModel("Barcelona, ES"))
+        listData.add(DataModel("Zurich, CH"))
+        listData.add(DataModel("Thrissur, IN"))
+        listData.add(DataModel("Kochi, IN"))
+        listData.add(DataModel("Aluva, IN"))
+
+
+
+
 
     }
 
