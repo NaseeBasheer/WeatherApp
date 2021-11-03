@@ -1,9 +1,13 @@
 package com.example.weatherapplication.ui.fragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.text.Layout
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.weatherapplication.R
+import com.example.weatherapplication.ui.activity.CoroutineAsyncTask
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.URL
@@ -34,6 +40,8 @@ class DetailFragment : Fragment() {
     val API: String = "28d9ddb0e847b8ceb7d5bd2cd4b94b15"
 
 
+
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
 
@@ -46,14 +54,46 @@ class DetailFragment : Fragment() {
             weatherTask().execute()
         }
     }
+    private fun showAlertDialogue(){
+        var builder = AlertDialog.Builder(activity)
+        builder.setTitle("Alert")
+        builder.setMessage("Something went wrong, weather data is not available")
+        builder.setPositiveButton("go back", DialogInterface.OnClickListener { dialog, id ->
+            //put code to go back
+            onGoBack()
+            dialog.cancel()
+        })
+        builder.setNegativeButton("retry", DialogInterface.OnClickListener { dialog, id ->
+            dialog.cancel()
+        })
+        var alert: AlertDialog = builder.create()
+        alert.show()
+
+
+    }
+    private fun onGoBack() {
+        parentFragmentManager.popBackStack()
+
+    }
+
+    private fun goBackToPreviousFragment(){
+        val frag = SecondFragment()
+        val fragManager = requireActivity().supportFragmentManager
+        val fragTransaction = fragManager.beginTransaction()
+        fragTransaction.replace(R.id.frame_holder, frag,"main_fragment")
+        fragTransaction.addToBackStack(null)
+        fragTransaction.commit()
+    }
+
 
     @SuppressLint("NewApi")
-    inner class weatherTask(): AsyncTask<String, Void, String>(){
+    inner class weatherTask(): CoroutineAsyncTask<String, Void, String>(){
         override fun onPreExecute() {
             super.onPreExecute()
             val bar = view?.findViewById<ProgressBar>(R.id.loader)
             bar?.visibility = View.VISIBLE
-
+            val loading = view?.findViewById<TextView>(R.id.load)
+            loading?.visibility = View.VISIBLE
 
         }
 
@@ -113,12 +153,17 @@ class DetailFragment : Fragment() {
 
                 val bar = view?.findViewById<ProgressBar>(R.id.loader)
                 bar?.visibility = View.GONE
+                val loading = view?.findViewById<TextView>(R.id.load)
+                loading?.visibility = View.GONE
 
 
             }
             catch (e: Exception){
                 val bar = view?.findViewById<ProgressBar>(R.id.loader)
                 bar?.visibility = View.VISIBLE
+                showAlertDialogue()
+                val loading = view?.findViewById<TextView>(R.id.load)
+                loading?.visibility = View.VISIBLE
             }
         }
     }

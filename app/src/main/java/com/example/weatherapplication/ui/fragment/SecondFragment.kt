@@ -44,6 +44,7 @@ class SecondFragment : Fragment(), RecyclerViewAdapter.ClickListener {
         recyclerView.adapter = adapter
     }
     private fun buildDisplayedData(){
+        listData.add(DataModel("Aluv, un"))
         listData.add(DataModel("London, UK"))
         listData.add(DataModel("New York, US"))
         listData.add(DataModel("Chicago, US"))
