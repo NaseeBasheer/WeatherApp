@@ -118,6 +118,7 @@ class DetailFragment : Fragment() {
                 val jsonObj = JSONObject(result)
                 val main = jsonObj.getJSONObject("main")
                 val sys = jsonObj.getJSONObject("sys")
+                val coord = jsonObj.getJSONObject("coord")
                 val wind = jsonObj.getJSONObject("wind")
                 val weather = jsonObj.getJSONArray("weather").getJSONObject(0)
                 val updatedAt:Long = jsonObj.getLong("dt")
@@ -131,9 +132,18 @@ class DetailFragment : Fragment() {
                 val humidity = main.getString("humidity")
                 val sunrise:Long = sys.getLong("sunrise")
                 val sunset:Long = sys.getLong("sunset")
+                val latti= "Latitude: "+coord.getString("lat")+"°"
+                val longgi = "Longitude: "+coord.getString("lon")+"°"
                 val weatherDescription = "Weather Description: "+weather.getString("description")
                 val address = jsonObj.getString("name")+", "+sys.getString("country")
 
+
+
+
+                val lat1 = view?.findViewById<TextView>(R.id.latit)
+                lat1?.text = longgi
+                val long1 = view?.findViewById<TextView>(R.id.longi)
+                long1?.text = latti
 
                 val maxTemp = view?.findViewById<TextView>(R.id.maxTemp)
                 maxTemp?.text = tempMax
