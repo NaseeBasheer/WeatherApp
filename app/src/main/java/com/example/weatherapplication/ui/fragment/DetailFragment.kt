@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.weatherapplication.R
+import com.example.weatherapplication.databinding.FirstFragmentBinding
+import com.example.weatherapplication.databinding.FragmentDetailBinding
 import com.example.weatherapplication.ui.activity.CoroutineAsyncTask
 import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
@@ -34,6 +36,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class DetailFragment : Fragment() {
+
+    private var _binding: FragmentDetailBinding? = null
+    private val binding get() = _binding!!
 
 
     val CITY: String = "dhaka, bd"
@@ -90,24 +95,20 @@ class DetailFragment : Fragment() {
     inner class weatherTask(): CoroutineAsyncTask<String, Void, String>(){
         override fun onPreExecute() {
             super.onPreExecute()
-            val bar = view?.findViewById<ProgressBar>(R.id.loader)
-            bar?.visibility = View.VISIBLE
-            val loading = view?.findViewById<TextView>(R.id.load)
-            loading?.visibility = View.VISIBLE
+            binding.loader.visibility = View.VISIBLE
+            binding.load.visibility = View.VISIBLE
+
 
         }
 
         @SuppressLint("ResourceType")
         override fun doInBackground(vararg params: String?): String? {
-            var response: String?
-            try {
-                val title=  view?.findViewById<TextView>(R.id.titleTV)
-                title?.text = param1
-                response = URL("https://api.openweathermap.org/data/2.5/weather?q=$param1&units=metric&appid=$API").readText(
+            var response: String? = try {
+
+                URL("https://api.openweathermap.org/data/2.5/weather?q=$param1&units=metric&appid=$API").readText(
                     Charsets.UTF_8)
-            }
-            catch (e: Exception){
-                response = null
+            } catch (e: Exception){
+                null
             }
             return response
         }
@@ -138,42 +139,25 @@ class DetailFragment : Fragment() {
                 val address = jsonObj.getString("name")+", "+sys.getString("country")
 
 
+                binding.latit.text = latti
+                binding.longi.text = longgi
+                binding.maxTemp.text = tempMax
+                binding.minTemp.text = tempMin
+                binding.description.text = weatherDescription
+                binding.pressure.text = pressure
+                binding.loader.visibility = View.GONE
+                binding.load.visibility = View.GONE
 
-
-                val lat1 = view?.findViewById<TextView>(R.id.latit)
-                lat1?.text = longgi
-                val long1 = view?.findViewById<TextView>(R.id.longi)
-                long1?.text = latti
-
-                val maxTemp = view?.findViewById<TextView>(R.id.maxTemp)
-                maxTemp?.text = tempMax
-
-                val minTemp = view?.findViewById<TextView>(R.id.minTemp)
-                minTemp?.text = tempMin
-
-                val weaDescription = view?.findViewById<TextView>(R.id.description)
-                weaDescription?.text = weatherDescription
-
-
-
-                val pres = view?.findViewById<TextView>(R.id.pressure)
-                pres?.text = pressure
-
-
-
-                val bar = view?.findViewById<ProgressBar>(R.id.loader)
-                bar?.visibility = View.GONE
-                val loading = view?.findViewById<TextView>(R.id.load)
-                loading?.visibility = View.GONE
 
 
             }
             catch (e: Exception){
-                val bar = view?.findViewById<ProgressBar>(R.id.loader)
-                bar?.visibility = View.VISIBLE
+                binding.loader.visibility = View.VISIBLE
+
                 showAlertDialogue()
-                val loading = view?.findViewById<TextView>(R.id.load)
-                loading?.visibility = View.VISIBLE
+                binding.load.visibility = View.VISIBLE
+
+
             }
         }
     }
@@ -181,12 +165,14 @@ class DetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
         val view=  inflater.inflate(R.layout.fragment_detail, container, false)
-        val title=  view.findViewById<TextView>(R.id.titleTV)
-        title.text = param1
-        return view
+
+        binding.titleTV.text = param1
+        return binding.root
     }
 
 
